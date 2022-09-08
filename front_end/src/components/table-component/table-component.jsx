@@ -32,7 +32,7 @@ const TableComponent = (props) => {
     }
 
     if (tableRows?.length === 0) {
-        return <div>No Data Component</div>
+        return <div>No Data Available</div>
     }
 
     return (

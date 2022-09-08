@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import Loader from '../loader/loader';
 import { search } from '../store/action';
 import TableComponent from '../table-component/table-component';
+import { toast } from '../toast/toast';
 import "./styles/search.scss";
 
 const SearchPage = (props) => {
@@ -18,7 +19,11 @@ const SearchPage = (props) => {
             let columnData = data?.columns?.map((elem => elem?.name));
             setRows(data?.rows);
             setColumns(columnData);
-            setIsLoading(false)
+        }).catch((error) => {
+            console.error(error);
+            toast.error("Something Went Wrong");
+        }).finally(() => {
+            setIsLoading(false);
         })
     }
 

@@ -61,8 +61,9 @@ export const saleFormFields = [
     },
     {
         columnId: 7,
-        format: "text",
-        name: "selling_price"
+        format: "number",
+        name: "selling_price",
+        maxValue: 100000
     },
     {
         columnId: 8,
@@ -109,7 +110,7 @@ export const saleFormFields = [
         columnId: 16,
         format: "dropdown",
         name: "customer_marital_status",
-        values: [{ title: "Married", value: 1 }, { title: "Single", value: 0 }]
+        values: [{ title: "Single", value: "0" }, { title: "Married", value: "1" }]
     }
 ]
 

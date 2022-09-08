@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { saleFormFields } from '../../constants';
-import { addNewSale, capitalize, getSaleData } from '../store/action';
+import { addNewSale, capitalize, getSaleData, updateSale } from '../store/action';
 import Form from "react-bootstrap/Form"
 import "./styles/sales.scss";
 import Loader from '../loader/loader';
@@ -13,7 +13,13 @@ import { booleanTypeArray } from '../../../../back_end/constants';
 const Sales = (props) => {
     const initialData = {
         customer_gender: "Male",
-        customer_marital_status: 0
+        customer_marital_status: 0,
+        power_steering: 0,
+        airbags: 0,
+        sunroof: 0,
+        matte_finish: 0,
+        music_system: 0,
+
     }
 
     const [isLoading, setIsLoading] = useState(true);
@@ -31,15 +37,27 @@ const Sales = (props) => {
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
+        setIsLoading(true);
         let saleId = location?.pathname?.split("/")[2];
         if (!!saleId) {
             //edit
+            updateSale(saleData).then(({ data }) => {
+                toast.success("Entry Updated");
+                fetchSaleData();
+            }).catch((error) => {
+                console.error(error);
+                toast.error("Something went wrong");
+            }).finally(() => {
+                setIsLoading(false);
+            })
         } else {
             // new
             addNewSale(saleData).then(({ data }) => {
                 toast.success("New Entry Added");
                 fetchSaleData();
-            }).catch(error => { console.error(error); toast.error(error?.response?.data?.detail) })
+            }).catch(error => { console.error(error); toast.error(error?.response?.data?.detail) }).finally(() => {
+                setIsLoading(false);
+            })
         }
     }
 
@@ -53,6 +71,15 @@ const Sales = (props) => {
                 setStatData(data?.featureData);
                 setFormKey(new Date().toISOString())
                 setDisabled(false);
+            }).catch((error) => {
+                console.error(error);
+                setSaleData(initialData);
+                setStatData(null);
+                setFormKey(new Date().toISOString())
+                setDisabled(true);
+                toast.error("Something Went Wrong")
+            }).finally(() => {
+                setIsLoading(false);
             })
         } else {
             setSaleData(initialData);
@@ -81,7 +108,6 @@ const Sales = (props) => {
     const setElemState = (name, value) => {
         let sales = { ...saleData, [name]: value };
         // excluding checkboxes because they are optional
-        console.log(value)
         if (Object.entries(sales)?.filter(([key, value]) => !!value && !booleanTypeArray?.includes(key))?.length >= saleFormFields.length - 5) {
             setDisabled(false);
         } else {
@@ -103,6 +129,11 @@ const Sales = (props) => {
                 return <div key={elemIndex} className='text-input-container form-field-container'>
                     <label htmlFor={id}>{`${capitalize(name)} *`}</label>
                     <input placeholder={`Enter ${capitalize(name)}`} id={id} value={value} onChange={(e) => setElemState(elemData?.name, e.target?.value)} type={"text"} className='form-input-field' />
+                </div>
+            case "number":
+                return <div key={elemIndex} className='text-input-container form-field-container'>
+                    <label htmlFor={id}>{`${capitalize(name)} *`}</label>
+                    <input placeholder={`Enter ${capitalize(name)}`} id={id} value={value} onChange={(e) => setElemState(elemData?.name, e.target?.value)} type={"number"} max={elemData?.maxValue} className='form-input-field' />
                 </div>
             case "date":
                 return <div key={elemIndex} className='date-input-container form-field-container'>

@@ -40,6 +40,9 @@ export const search = (searchText) => {
 export const addNewSale = (params) => {
     return axios.post(process.env.NEW_SALE_API, params)
 }
+export const updateSale = (params) => {
+    return axios.put(process.env.UPDATE_SALE_API, params)
+}
 
 export const getStatistics = () => {
     return axios.get(process.env.STATISTICS_API)

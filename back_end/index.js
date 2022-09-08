@@ -102,6 +102,25 @@ app.post("/api/newSale", (req, res) => {
         res.status(400).send(error);
     }
 })
+app.put("/api/updateSale", async (req, res) => {
+    try {
+        let setValues = Object.entries(req.body).filter(([key, value]) => key !== "sales_id" && key !== "date_of_purchase").map(([key, value]) => `${key}='${!!value ? value : 0}'`)
+        await Promise.all([setValues]);
+        let query = `UPDATE ${tableName} SET ${setValues.join(", ")} WHERE sales_id=${req?.body?.sales_id} `;
+        console.log(query);
+        postgresClient.query(query, null, (error, result) => {
+            if (error) {
+                console.error(error);
+                res.status(400).send(error);
+            } else {
+                res.send(result).status(201);
+            }
+        })
+    } catch (error) {
+        console.error(error);
+        res.status(400).send(error);
+    }
+})
 
 app.get("/api/getSaleData", (req, res) => {
     try {
