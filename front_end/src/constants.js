@@ -124,8 +124,8 @@ const booleanTypeArray = [
 
 // username = "postgres"
 // password = "admin"
-// docker build -t bcg_db_image .
-// docker run -dt --rm --name bcg -e POSTGRES_PASSWORD=1234 -e POSTGRES_USER=postgres -e POSTGRES_DB=bcg_db -p 6666:5432 bcg_db_image
+// docker build --no-cache -t bcg_db_image .
+// docker run -dt --name bcg -e POSTGRES_PASSWORD=1234 -e POSTGRES_USER=postgres -e POSTGRES_DB=bcg_db -p 6666:5432 bcg_db_image
 // docker exec -it bcg sh
 // psql -U postgres -d bcg_db
 // \COPY car_sales FROM data.csv DELIMITER ',' CSV HEADER;

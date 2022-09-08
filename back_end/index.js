@@ -7,6 +7,7 @@ const { capitalize, booleanTypeArray, dbSchema, searchSchema, tableName } = requ
 const postgresClient = new Client({
     user: "postgres",
     password: "1234",
+    // host: "tcp-mo1.mogenius.io",
     host: "localhost",
     database: "bcg_db",
     port: "6666"
@@ -18,6 +19,38 @@ postgresClient.connect().then((e) => {
 
 app.use(express.json());
 app.use(cors());
+
+app.get("/api/uploadData", (res, req) => {
+    postgresClient.query("COPY car_sales FROM 'data.csv' DELIMITER ',' CSV HEADER;", null, (error, data) => {
+        console.log(data)
+    });
+})
+
+app.get("/api/test", (req, res) => {
+    try {
+        let queries = [
+            "select to_char(date_of_purchase,'Mon-YY') as month, fuel, COUNT(fuel) from car_sales group by 1,2",
+            "select customer_gender, COUNT(customer_gender) from car_sales group by 1",
+            "select customer_region, COUNT(customer_region) from car_sales group by 1"
+        ]
+        postgresClient.query("select to_char(date_of_purchase,'Mon-YY') as month, fuel, COUNT(fuel) from car_sales group by 1,2", null, async (error, data) => {
+            console.log(data.rows);
+            res.status(200).send(data.rows)
+        });
+        postgresClient.query("select customer_gender, COUNT(customer_gender) from car_sales group by 1;", null, async (error, data) => {
+            console.log(data.rows);
+            res.status(200).send(data.rows)
+        });
+        postgresClient.query("select customer_region, COUNT(customer_region) from car_sales group by 1;", null, async (error, data) => {
+            console.log(data.rows);
+            res.status(200).send(data.rows)
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(400).send(error)
+    }
+})
 
 app.get("/api/statistics", (req, res) => {
     try {
@@ -48,7 +81,8 @@ app.get("/api/statistics", (req, res) => {
             }
         })
     } catch (error) {
-
+        console.error(error);
+        res.status(400).send(error)
     }
 })
 
