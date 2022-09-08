@@ -25,7 +25,7 @@ const Statistics = (props) => {
     }, [])
 
     return (
-        <div className="statistics-container px-3">
+        <div className="statistics-container px-3 mb-5">
             <div className="projections text-center mt-3 w-100">
                 <ComposedChart width={1650} height={400} data={monthlySales}>
                     <XAxis dataKey="name" />

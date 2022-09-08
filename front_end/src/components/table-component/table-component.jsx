@@ -32,17 +32,17 @@ const TableComponent = (props) => {
     }
 
     if (tableRows?.length === 0) {
-        return <div>No Data Available</div>
+        return <div className='text-center'>No Data Available</div>
     }
 
     return (
         <table className={`table-component ${props?.className}`}>
             <thead>
                 <tr>
-                    {columns?.map((elem, index) => {
+                    {columns?.map((col, index) => {
                         return <th key={index}>
-                            {capitalize(elem)}
-                            <button className={`sort-btn ${sortKey === elem ? "" : "hidden"}`} onClick={() => toggleSort(elem)}>
+                            {capitalize(col)}
+                            <button className={`sort-btn ${sortKey === col ? "" : "hidden"}`} onClick={() => toggleSort(col)}>
                                 {isAscSort ?
                                     <BsSortAlphaDownAlt />
                                     :
@@ -54,11 +54,11 @@ const TableComponent = (props) => {
                 </tr>
             </thead>
             <tbody>
-                {tableRows?.map((elem, ind) => {
+                {tableRows?.map((row, ind) => {
                     return <tr key={ind}>
-                        {Object.entries(elem).map(([key, value]) => {
+                        {Object.entries(row).map(([key, value]) => {
                             return <td key={key}>
-                                {!!nameRenderer ? nameRenderer(key, value, ind, elem) : value}
+                                {!!nameRenderer ? nameRenderer(key, value, ind, row) : value}
                             </td>
                         })}
                     </tr>

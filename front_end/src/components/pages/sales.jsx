@@ -91,13 +91,13 @@ const Sales = (props) => {
 
     const formBuilder = () => {
         return <form className='sale-form' key={formKey} onSubmit={handleFormSubmit}>
-            {saleFormFields?.map((elem, index) => {
+            {saleFormFields?.map((saleElement, index) => {
                 if (!!saleData) {
-                    elem.value = saleData[elem?.name];
+                    saleElement.value = saleData[saleElement?.name];
                 } else {
-                    elem.value = "";
+                    saleElement.value = "";
                 }
-                return renderElementByType(elem, index)
+                return renderElementByType(saleElement, index)
             })}
             <button disabled={disabled} className="primary-btn" type="submit">Submit</button>
             <button className="secondary-btn" type="reset" onClick={resetForm}>Cancel</button>

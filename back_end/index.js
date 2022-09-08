@@ -33,8 +33,8 @@ app.get("/api/statistics", (req, res) => {
                 let rows = statsData?.rows;
                 if (index === 0) {
                     let set = {}
-                    let rowMap = rows?.map(elem => {
-                        set[elem?.month] = !!set[elem?.month] ? { ...set[elem?.month], [elem?.fuel]: Number(elem?.count), total: Number(set[elem?.month].total) + Number(elem?.count) } : { [elem?.fuel]: Number(elem?.count), total: Number(elem?.count) };
+                    let rowMap = rows?.map(rowElem => {
+                        set[rowElem?.month] = !!set[rowElem?.month] ? { ...set[rowElem?.month], [rowElem?.fuel]: Number(rowElem?.count), total: Number(set[rowElem?.month].total) + Number(rowElem?.count) } : { [rowElem?.fuel]: Number(rowElem?.count), total: Number(rowElem?.count) };
                     })
                     return Object.entries(set)?.map(([key, value]) => {
                         return {
@@ -43,7 +43,7 @@ app.get("/api/statistics", (req, res) => {
                         }
                     }).sort((a, b) => new Date(a.name) - new Date(b.name));
                 } else {
-                    return rows.map(elem => { return { ...elem, count: Number(elem?.count) } });
+                    return rows.map(rowElem => { return { ...rowElem, count: Number(rowElem?.count) } });
                 }
             })
             res.send({ monthlySales: dataMap[0], genderSales: dataMap[1], regionSales: dataMap[2] })

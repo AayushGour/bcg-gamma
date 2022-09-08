@@ -16,7 +16,7 @@ const SearchPage = (props) => {
         setIsLoading(true);
         setRows([]);
         search(location?.pathname?.split("/")[2]).then(({ data }) => {
-            let columnData = data?.columns?.map((elem => elem?.name));
+            let columnData = data?.columns?.map((col => col?.name));
             setRows(data?.rows);
             setColumns(columnData);
         }).catch((error) => {

@@ -10,7 +10,7 @@ const SidebarLeft = (props) => {
     const [selected, setSelected] = useState("");
 
     useEffect(() => {
-        let id = leftSidebarMenuItems?.find(elem => elem?.route?.split("/")[1] === location.pathname?.split("/")[1])?.id;
+        let id = leftSidebarMenuItems?.find(menuItem => menuItem?.route?.split("/")[1] === location.pathname?.split("/")[1])?.id;
         setSelected(id);
     }, [location?.pathname])
 
@@ -19,13 +19,13 @@ const SidebarLeft = (props) => {
         <div className="left-sidebar">
             <h4 className='sidebar-title'>CAR SALES</h4>
             <ul className='sidebar-list'>
-                {leftSidebarMenuItems?.map((element, index) => {
-                    if (element?.hidden) {
+                {leftSidebarMenuItems?.map((menuItem, index) => {
+                    if (menuItem?.hidden) {
                         return null;
                     }
-                    return <li key={index} onClick={() => { setSelected(element?.id); navigate(element?.route) }} className={`sidebar-list-item ${element?.id === selected ? "selected" : ""}`}>
-                        {element.icon}
-                        <span>{element.title}</span>
+                    return <li key={index} onClick={() => { setSelected(menuItem?.id); navigate(menuItem?.route) }} className={`sidebar-list-item ${menuItem?.id === selected ? "selected" : ""}`}>
+                        {menuItem.icon}
+                        <span>{menuItem.title}</span>
                     </li>
                 })}
             </ul>
