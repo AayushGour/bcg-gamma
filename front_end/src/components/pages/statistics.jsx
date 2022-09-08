@@ -26,7 +26,7 @@ const Statistics = (props) => {
     }, [])
 
     return (
-        <div className="statistics-container px-3 mb-5 h-100">
+        <div className="statistics-container px-3 h-100">
             {isLoading ? <Loader /> :
                 <>
                     <div className="projections text-center mt-3 w-100">
@@ -65,7 +65,7 @@ const Statistics = (props) => {
                             </PieChart>
                             <h5 className='mt-3'>Gender Sales Projection</h5>
                         </div>
-                        <div className="projections text-center mt-3 w-50">
+                        <div className="projections text-center my-3 w-50">
                             <RadarChart outerRadius={150} width={800} height={400} data={regionSales}>
                                 <PolarGrid />
                                 <PolarAngleAxis dataKey="name" />
