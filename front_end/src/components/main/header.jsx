@@ -24,8 +24,10 @@ const Header = (props) => {
         setSearchText("");
     }
 
-    let headerTitle = leftSidebarMenuItems?.find(elem => elem?.route?.split("/")[1] === location?.pathname?.split("/")[1]).title
-    let searchTitle = headerTitle === "Search" ? location?.pathname?.split("/")[2] : "";
+    let headerTitle = leftSidebarMenuItems?.find(elem => elem?.route?.split("/")[1] === location?.pathname?.split("/")[1]).title;
+    let subRoute = location?.pathname?.split("/")[2];
+    headerTitle = headerTitle === "Sales" && !!subRoute ? "Edit Sales" : "New Sale";
+    let searchTitle = headerTitle === "Search" ? decodeURI(subRoute) : "";
     return (
         <div className="application-header">
             <h3 className='header-title'>{`${headerTitle} ${searchTitle}`}</h3>
