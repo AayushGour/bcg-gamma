@@ -1,18 +1,18 @@
 const express = require('express');
+require("dotenv").config();
 const cors = require("cors");
 const app = express();
-PORT = 5000
+PORT = process.env.PORT || 5000;
 const { Client, Pool } = require("pg");
 const { capitalize, booleanTypeArray, dbSchema, searchSchema, tableName } = require('./constants');
-const postgresClient = new Client({
-    user: "postgres",
-    password: "1234",
-    // host: "tcp-mo1.mogenius.io",
-    host: "localhost",
-    database: "bcg_db",
-    port: "6666"
-    // port: "12141"
-});
+const clientConfig = {
+    user: process.env.DBUSER,
+    password: process.env.DBPASSWORD,
+    host: process.env.DBHOST,
+    database: process.env.DATABASE,
+    port: process.env.DBPORT
+}
+const postgresClient = new Client(clientConfig);
 
 postgresClient.connect().then((e) => {
     console.log("Client Connected")
