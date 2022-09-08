@@ -1,0 +1,30 @@
+@import "../../../variables.scss";
+
+.search-page-container {
+    overflow: hidden auto;
+    height: 100%;
+    .search-table {
+        thead {
+            tr {
+                position: sticky;
+                top: 0;
+                th {
+                    padding: 10px;
+                }
+            }
+        }
+        tbody {
+            tr {
+                &:nth-child(odd) {
+                    background-color: $white100;
+                }
+                &:nth-child(even) {
+                    background-color: $grey;
+                }
+                td {
+                    padding: 10px;
+                }
+            }
+        }
+    }
+}

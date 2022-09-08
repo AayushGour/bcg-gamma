@@ -1,0 +1,59 @@
+@import "../../../variables.scss";
+
+.sales-container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    column-gap: 10px;
+    .sale-form {
+        width: fit-content;
+        .form-field-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            column-gap: 10px;
+            min-height: 30px;
+            margin: 10px 0px;
+            label {
+                min-width: 200px;
+                max-width: 200px;
+            }
+            .form-input-field {
+                border: 1px solid $black50;
+                border-radius: 5px;
+                padding: 5px 8px;
+            }
+
+            .form-input-field,
+            .form-select {
+                min-width: 300px;
+                max-width: 300px;
+                outline: none !important;
+                border: 1px solid $darkGrey;
+                &:focus-visible {
+                    box-shadow: 0px 0px 3px $primaryColor;
+                }
+            }
+            .form-input-field[type="checkbox"] {
+                height: 1rem;
+            }
+        }
+    }
+    .chart-container {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        &.hidden {
+            display: none;
+        }
+        .primary-btn {
+            position: absolute;
+            top: 0%;
+            right: 0;
+        }
+    }
+}

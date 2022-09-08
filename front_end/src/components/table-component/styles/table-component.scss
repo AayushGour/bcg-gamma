@@ -1,0 +1,53 @@
+@import "../../../variables.scss";
+
+.table-component {
+    padding: 0px 10px;
+    thead {
+        tr {
+            border-bottom: 1px solid $grey;
+            background-color: $white100;
+            border-top: 1px solid $grey;
+            th {
+                border-left: 1px solid $grey;
+                border-right: 1px solid $grey;
+                &:hover {
+                    .sort-btn.hidden {
+                        opacity: 1;
+                    }
+                }
+                .sort-btn {
+                    opacity: 1;
+                    transition: all 0.3s;
+                    -webkit-transition: all 0.3s;
+                    outline: none !important;
+                    border: none !important;
+                    background-color: transparent;
+                    font-size: 1.2rem;
+                    &.hidden {
+                        opacity: 0;
+                        &:hover {
+                            opacity: 1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    tbody {
+        tr {
+            &:nth-child(odd) {
+                background-color: $white100;
+            }
+            &:nth-child(even) {
+                background-color: $grey;
+            }
+            td {
+                border-left: 1px solid $grey;
+                border-right: 1px solid $grey;
+            }
+            &:last-child {
+                border-bottom: 1px solid $grey;
+            }
+        }
+    }
+}

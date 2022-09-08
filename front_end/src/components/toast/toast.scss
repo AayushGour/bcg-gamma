@@ -1,0 +1,46 @@
+@import "../../variables.scss";
+
+.custom-toast-container {
+    min-width: 100px;
+    display: flex;
+    flex-direction: row;
+    max-width: 400px;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    box-shadow: 1px 1px 4px #00000080;
+    background-color: $white100;
+    column-gap: 10px;
+    margin-top: 40px;
+    border-radius: 10px;
+    transition: all 0.3s;
+    animation-duration: 0.5s;
+    animation-name: fade-in;
+    svg {
+        font-size: 1.5rem;
+    }
+    span {
+        font-size: 1rem;
+        line-height: 1rem;
+    }
+    &.info {
+        svg {
+            color: $infoBlue;
+        }
+    }
+    &.error {
+        svg {
+            color: $errorRed;
+        }
+    }
+    &.success {
+        svg {
+            color: $successGreen;
+        }
+    }
+    &.warning {
+        svg {
+            color: $warningYellow;
+        }
+    }
+}

@@ -1,0 +1,17 @@
+### dotenv ### 
+# .env 
+# .envlocal 
+# .envstag 
+# .envprod 
+# dependencies 
+/node_modules 
+package-lock.json 
+/.pnp 
+.pnp.js 
+# testing 
+/coverage 
+# production 
+/build 
+/dist 
+#misc 
+.vscode 
