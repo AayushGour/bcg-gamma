@@ -21,7 +21,7 @@ const SearchPage = (props) => {
             setColumns(columnData);
         }).catch((error) => {
             console.error(error);
-            toast.error("Something Went Wrong");
+            toast.error("Invalid Search Keyword/s");
         }).finally(() => {
             setIsLoading(false);
         })

@@ -20,9 +20,9 @@ const TableComponent = (props) => {
         if (!!rows && Array.isArray(rows) && rows?.length > 0) {
             let tRows = rows?.sort((a, b) => {
                 if (isAscSort) {
-                    return a[key] - b[key]
+                    return String(a[key]) - String(b[key])
                 } else {
-                    return b[key] - a[key]
+                    return String(b[key]) - String(a[key])
                 }
             })
             setSortKey(key);
@@ -32,7 +32,7 @@ const TableComponent = (props) => {
     }
 
     if (tableRows?.length === 0) {
-        return <div className='text-center'>No Data Available</div>
+        return <div className='text-center m-5 no-data'>No Data Available</div>
     }
 
     return (

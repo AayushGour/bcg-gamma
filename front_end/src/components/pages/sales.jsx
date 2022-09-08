@@ -173,7 +173,7 @@ const Sales = (props) => {
                             <RadarChart outerRadius={150} width={800} height={400} data={statData}>
                                 <PolarGrid />
                                 <PolarAngleAxis dataKey="name" />
-                                <PolarRadiusAxis angle={0} domain={[0, 1]} tickCount={2} />
+                                <PolarRadiusAxis angle={90} domain={[0, 1]} tickCount={2} />
                                 <Radar dataKey="value" stroke="#477cff" fill="#477cff" fillOpacity={0.6} />
                             </RadarChart>
                             <h4>Car Features</h4>
