@@ -21,6 +21,11 @@ postgresClient.connect().then((e) => {
 app.use(express.json());
 app.use(cors());
 
+app.use((req, res, next) => {
+    console.log("Accessed Path", req.path);
+    next();
+})
+
 app.get("/api/statistics", (req, res) => {
     try {
         let queries = [
