@@ -110,7 +110,7 @@ export const saleFormFields = [
         columnId: 16,
         format: "dropdown",
         name: "customer_marital_status",
-        values: [{ title: "Single", value: "0" }, { title: "Married", value: "1" }]
+        values: [{ title: "Single", value: false }, { title: "Married", value: true }]
     }
 ]
 

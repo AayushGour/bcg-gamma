@@ -40,8 +40,14 @@ const SearchPage = (props) => {
                 return <div key={key}>{new Date(value).toDateString()}</div>;
             case "customer_marital_status":
                 return <div key={key}>{value ? "Married" : "Single"}</div>;
+            case "matte_finish":
+            case "music_system":
+            case "power_steering":
+            case "sunroof":
+            case "airbags":
+                return <div key={key}>{value ? "Available" : "N/A"}</div>
             default:
-                return <div key={key}>{value === "1" ? "Available" : value === "0" ? "N/A" : value}</div>
+                return <div key={key}>{value}</div>
         }
     }
     return (

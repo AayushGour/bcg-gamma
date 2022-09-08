@@ -11,6 +11,7 @@ const postgresClient = new Client({
     host: "localhost",
     database: "bcg_db",
     port: "6666"
+    // port: "12141"
 });
 
 postgresClient.connect().then((e) => {
@@ -20,66 +21,33 @@ postgresClient.connect().then((e) => {
 app.use(express.json());
 app.use(cors());
 
-app.get("/api/uploadData", (res, req) => {
-    postgresClient.query("COPY car_sales FROM 'data.csv' DELIMITER ',' CSV HEADER;", null, (error, data) => {
-        console.log(data)
-    });
-})
-
-app.get("/api/test", (req, res) => {
-    try {
-        let queries = [
-            "select to_char(date_of_purchase,'Mon-YY') as month, fuel, COUNT(fuel) from car_sales group by 1,2",
-            "select customer_gender, COUNT(customer_gender) from car_sales group by 1",
-            "select customer_region, COUNT(customer_region) from car_sales group by 1"
-        ]
-        postgresClient.query("select to_char(date_of_purchase,'Mon-YY') as month, fuel, COUNT(fuel) from car_sales group by 1,2", null, async (error, data) => {
-            console.log(data.rows);
-            res.status(200).send(data.rows)
-        });
-        postgresClient.query("select customer_gender, COUNT(customer_gender) from car_sales group by 1;", null, async (error, data) => {
-            console.log(data.rows);
-            res.status(200).send(data.rows)
-        });
-        postgresClient.query("select customer_region, COUNT(customer_region) from car_sales group by 1;", null, async (error, data) => {
-            console.log(data.rows);
-            res.status(200).send(data.rows)
-        });
-
-    } catch (error) {
-        console.error(error);
-        res.status(400).send(error)
-    }
-})
-
 app.get("/api/statistics", (req, res) => {
     try {
-        postgresClient.query("SELECT * FROM car_sales", null, async (error, data) => {
-            if (error) {
-                console.error(error); res.status(400).send(error);
-            } else {
-                let rows = data?.rows;
-                let monthlySales = {};
-                let genderSales = {};
-                let regionSales = {};
-                let monthlySalesCalculator = rows?.map((sale) => {
-                    let gender = sale?.customer_gender;
-                    let region = sale?.customer_region;
-                    let month = new Date(sale?.date_of_purchase).toLocaleDateString("default", { month: "long", year: "numeric" });
-                    let fuel = sale?.fuel;
-                    monthlySales[month] = !!monthlySales[month] ? { ...monthlySales[month], saleCount: monthlySales[month].saleCount + 1 } : { saleCount: 1, [fuel]: 0 };
-                    monthlySales[month] = !!monthlySales[month] ? { ...monthlySales[month], [fuel]: !!monthlySales[month][fuel] ? monthlySales[month][fuel] + 1 : 1 } : { saleCount: 0, [fuel]: 1 };
-                    genderSales[gender] = !!genderSales[gender] ? genderSales[gender] + 1 : 1;
-                    regionSales[region] = !!regionSales[region] ? regionSales[region] + 1 : 1;
-                })
-                await Promise.resolve(monthlySalesCalculator);
-                let flattenMonthlySales = Object.entries(monthlySales)?.map(([key, value]) => { return { month: key, ...value } })
-                let flattenGenderSales = Object.entries(genderSales)?.map(([key, value]) => { return { name: key, count: value } })
-                let flattenRegionSales = Object.entries(regionSales)?.map(([key, value]) => { return { name: key, count: value } })
-                await Promise.all([flattenMonthlySales, flattenGenderSales, flattenRegionSales])
-                res.send({ monthlySales: flattenMonthlySales, genderSales: flattenGenderSales, regionSales: flattenRegionSales }).status(200);
-            }
-        })
+        let queries = [
+            "select to_char(date_of_purchase,'Mon-YYYY') as month, fuel, COUNT(fuel) from car_sales group by 1,2",
+            "select customer_gender as name, COUNT(customer_gender) from car_sales group by 1",
+            "select customer_region as name, COUNT(customer_region) from car_sales group by 1"
+        ]
+        postgresClient.query(queries?.join("; "), null, async (error, data) => {
+            let dataMap = data?.map((statsData, index) => {
+                let rows = statsData?.rows;
+                if (index === 0) {
+                    let set = {}
+                    let rowMap = rows?.map(elem => {
+                        set[elem?.month] = !!set[elem?.month] ? { ...set[elem?.month], [elem?.fuel]: Number(elem?.count), total: Number(set[elem?.month].total) + Number(elem?.count) } : { [elem?.fuel]: Number(elem?.count), total: Number(elem?.count) };
+                    })
+                    return Object.entries(set)?.map(([key, value]) => {
+                        return {
+                            name: key,
+                            ...value
+                        }
+                    }).sort((a, b) => new Date(a.name) - new Date(b.name));
+                } else {
+                    return rows.map(elem => { return { ...elem, count: Number(elem?.count) } });
+                }
+            })
+            res.send({ monthlySales: dataMap[0], genderSales: dataMap[1], regionSales: dataMap[2] })
+        });
     } catch (error) {
         console.error(error);
         res.status(400).send(error)
@@ -122,7 +90,6 @@ app.post("/api/newSale", (req, res) => {
         let keysArray = Object.entries(req.body).map(([key, value]) => key);
         let valuesArray = Object.entries(req.body).map(([key, value]) => `'${value}'`);
         let query = `INSERT INTO ${tableName} (${keysArray?.join(",")}) VALUES (${valuesArray?.join(",")});`;
-        console.log(query);
         postgresClient.query(query, null, (error, result) => {
             if (error) {
                 console.error(error);
@@ -141,7 +108,6 @@ app.put("/api/updateSale", async (req, res) => {
         let setValues = Object.entries(req.body).filter(([key, value]) => key !== "sales_id" && key !== "date_of_purchase").map(([key, value]) => `${key}='${!!value ? value : 0}'`)
         await Promise.all([setValues]);
         let query = `UPDATE ${tableName} SET ${setValues.join(", ")} WHERE sales_id=${req?.body?.sales_id} `;
-        console.log(query);
         postgresClient.query(query, null, (error, result) => {
             if (error) {
                 console.error(error);

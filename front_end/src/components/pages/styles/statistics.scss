@@ -1,6 +1,7 @@
 @import "../../../variables.scss";
 
 .statistics-container {
+    overflow-y: auto;
     .projections {
         display: flex;
         flex-direction: column;

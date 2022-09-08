@@ -13,13 +13,12 @@ import { booleanTypeArray } from '../../../../back_end/constants';
 const Sales = (props) => {
     const initialData = {
         customer_gender: "Male",
-        customer_marital_status: 0,
-        power_steering: 0,
-        airbags: 0,
-        sunroof: 0,
-        matte_finish: 0,
-        music_system: 0,
-
+        customer_marital_status: false,
+        power_steering: false,
+        airbags: false,
+        sunroof: false,
+        matte_finish: false,
+        music_system: false,
     }
 
     const [isLoading, setIsLoading] = useState(true);
@@ -107,8 +106,9 @@ const Sales = (props) => {
 
     const setElemState = (name, value) => {
         let sales = { ...saleData, [name]: value };
+
         // excluding checkboxes because they are optional
-        if (Object.entries(sales)?.filter(([key, value]) => !!value && !booleanTypeArray?.includes(key))?.length >= saleFormFields.length - 5) {
+        if (Object.entries(sales)?.filter(([key, value]) => value !== "" && !booleanTypeArray?.includes(key))?.length >= (saleFormFields.length - booleanTypeArray?.length)) {
             setDisabled(false);
         } else {
             setDisabled(true);
@@ -143,7 +143,7 @@ const Sales = (props) => {
             case "boolean":
                 return <div key={elemIndex} className='checkbox-input-container form-field-container'>
                     <label htmlFor={id}>{`${capitalize(name)}`}</label>
-                    <input id={id} checked={Boolean(Number(value))} onChange={(e) => setElemState(elemData?.name, Number(e.target?.checked))} type={"checkbox"} className='form-input-field' />
+                    <input id={id} checked={(value)} onChange={(e) => setElemState(elemData?.name, Boolean(e.target?.checked))} type={"checkbox"} className='form-input-field' />
                 </div>
             case "dropdown":
                 return <div key={elemIndex} className='checkbox-input-container form-field-container'>
