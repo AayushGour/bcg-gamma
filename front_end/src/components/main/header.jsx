@@ -26,7 +26,7 @@ const Header = (props) => {
 
     let headerTitle = leftSidebarMenuItems?.find(elem => elem?.route?.split("/")[1] === location?.pathname?.split("/")[1]).title;
     let subRoute = location?.pathname?.split("/")[2];
-    headerTitle = headerTitle === "Sales" && !!subRoute ? "Edit Sales" : "New Sale";
+    headerTitle = headerTitle === "Sales" && !!subRoute ? "Edit Sales" : headerTitle === "Sales" ? "New Sale" : headerTitle;
     let searchTitle = headerTitle === "Search" ? decodeURI(subRoute) : "";
     return (
         <div className="application-header">
